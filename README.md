@@ -36,7 +36,7 @@ To get started with **JMeterGenius**, follow these steps:
     cd JMeterGenius
     ```
 
-3. Use JMeter tools in [tools](tools) folder
+3. Use JMeter tools in [Tools](Tools) folder
 
 ## Usage💡
 
