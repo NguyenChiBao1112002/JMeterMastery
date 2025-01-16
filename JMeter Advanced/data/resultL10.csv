@@ -1,0 +1,5 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1734061970610,4576,SMTP Sampler,200,"Message successfully sent!
+",Thread Group 1-1,text,true,,194,0,1,1,null,0,0,0
+1734061975189,3513,SMTP Sampler,200,"Message successfully sent!
+",Thread Group 1-1,text,true,,196,0,1,1,null,0,0,0

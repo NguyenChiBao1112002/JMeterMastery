@@ -1,0 +1,436 @@
+***==============JMeter Automation - Duc Giang Tester Education Youtube Channel=================***
+
+Lesson 01-------------------------------------------------*
+// Config API
+Đề bài: Thực hành config API trên JMeter, Run và xem Result
+
+- Thread group: số lượng users cùng thực hiện 1 action nào đó trong một khoảng thời gian
+- Bất cứ khi nào cần dùng tính năng gì trong samplers đều cần tạo thread group
+  (Chuột phải trên Test Plan > Add > Threads (users) > Thread Group)
+- Chúng ta có thể biến đổi tên tất cả các thành phần trong JMeter
+
+- Samplers: chứa các thành phần dùng để gửi yêu cầu đến máy chủ và nhận phản hồi
+- Listeners: hiển thị kết quả, thông thường ta sẽ dùng View Results Tree để xem Response API. 
+  Các Listeners cho phép người dùng xem và phân tích kết quả dưới dạng đồ thị, bảng hoặc ghi log
+- Thêm Header (nếu cần): right click (lên API thì Header cho API đó, lên Thread Group thì chung cho mọi API trong
+Thread Group đó) -> Config Element -> HTTP Header Manager 
+
+
+Lesson 02-------------------------------------------------*
+// Config a Thread Group
+Ví dụ: Muốn giả lập 100 người chạy API nàY (API ở bài 1) trong 5s thì sao
+
+- Number of threads (users): Lấy số request (users) muốn gửi tới server
+- Ramp up period (second): Là tổng thời gian JMeter gửi hết số lượng request đi
+Ví dụ: 
+	-> 1000 target threads với 1000 seconds ramp-up: JMeter sẽ gửi 1 request 1s
+	-> 1000 target threads với 100 seconds ramp-up: JMeter sẽ gửi 10 request 1s
+	-> 1000 target threads với 50 seconds ramp-up: JMeter sẽ gửi 20 request 1s
+
+- Loop count: Là số lần lặp lại
+Ví dụ: cho 100 user chạy và loop count là 3 -> tổng số lần chạy sẽ là 100 user với 1 lần chạy và lặp lại 3 lần
+= 30 lần chạy, khi check vào Infinite ( (adj)[ˈinfənət]): vô hạn) thì sẽ chạy vô hạn
+
+- Các action khi đang chạy mà 1 request bị fail thì sẽ làm gì:
+	+ Continue: Khi có lỗi trong một sample, JMeter sẽ tiếp tục thực thi 
+	các samples còn lại trong cùng một thread hoặc thử lại các samples 
+	trong các thread tiếp theo mà không dừng lại.
+
+	+ Star next thread loop: au khi một sample gặp lỗi, JMeter sẽ bắt đầu 
+	vòng lặp (loop) của thread tiếp theo, thay vì tiếp tục các sample còn 
+	lại trong thread hiện tại.
+
+	+ Stop thread:Dừng chỉ thread hiện tại khi gặp lỗi, các threads còn lại sẽ tiếp tục chạy.
+
+	+ Stop test: Dừng toàn bộ test khi có lỗi xảy ra, 
+	nhưng các threads sẽ hoàn thành các sample còn lại trước khi test dừng.
+
+	+ Stop test now: Đây là lựa chọn cực kỳ khẩn cấp. Ngay khi có lỗi, toàn bộ test (Test Plan)
+	sẽ dừng lại ngay lập tức mà không đợi các thread khác hoàn thành.
+	
+
+// Một loại Listeners nữa (Bài 1 là View Results Tree): là Summary Report
+Right Click on Thread Groups -> Add -> Listeners -> Summary Report 
+Trong Summary Report: 
+	Column: Std.Dev: Độ lệch chuẩn | Đơn vị thời gian (thường là giây) = căn bậc 2 của phương sai)
+	Throughput (đây là thông số quan trọng): số lượng request được server xử lý trong 1 đơn vị thời gian thường là giây (s)
+	Received kb/s - lưu lượng server trả về, đơn vị là kilobytes/s
+	Sent kb/s - lưu lượng client gửi đi server, đơn vị là kilobyte/s
+	Avg.byte - lưu lượng trung bình mà server trả về là bytes
+
+
+
+
+Lesson 03-------------------------------------------------*
+// JsonPath
+- Định dạng JSON:
+{
+	"key1" : "value1",
+	"key2" : "value2",
+	"key3" :
+		{
+			"key3.1" : "value3.1",
+			"key3.2" : "value3.2",
+			...
+		},
+	......
+}
+- Có 6 loại cho value:
+	1. Object - {}
+	2. Array - []
+	3. String - ""
+	4. Number - 20
+	5. Boolean - true/false
+	6. null
+
+
+- Lấy JsonPath thủ công ($ hoặc x hoặc ko có: tùy vào phần mềm sử dụng Json Path đó)
+	+ Để lấy value của một key: $.key
+	+ Để lấy value của key2 mà key2 là con key1: $.key1.key2
+	+ Để lấy value của key2 mà key2 là con key1 + value của key1 có nhiều value [] -> phải thêm chỉ số index: $.key1[0].key2
+	(index đi từ 0)
+	+ Để lấy value thứ nhất của key2 (key2 có nhiều value) mà key2 là con key1: $.key1.key2[0]
+     => Đi theo cấp, nếu nó nhiều thì đánh index (đi từ 0), có thể check value bằng jsonpath.com
+
+- Lấy JsonPath bằng JsonFinder 
+
+
+Lesson 04-------------------------------------------------*
+// Json Assertion
+Khi API trả về response -> ta muốn verify JSON trong response như mong muốn thì thế nào
+-> có rất nhiều cách và nhiều function khác nhau để verify trên JMeter, chúng nằm ở Add >> Assertion >>...
+
+- Ô Match á regular expression: tick vào thì giá trị xem như biểu thức chính quy, có thể bắt các giá trị ko chính xác (vì lúc này nó xem như biểu thức chính quy)
+
+Đề bài 1:
+	. Request:
+		+ URL: https://reqres.in/api/login
+		+ Method: POST
+		+ Body: dạng parameter
+			. email: eve.holt@reqres.in
+			. password: cityslicka
+
+	. Response
+	{
+		"token": "aQanhsdsjhid7X4"
+	}
+
+	. Yêu cầu: Tôi muốn login bằng account trên và check xem token trả ra có đúng không
+
+
+-> Trong Json Assertion có các tham số:
+	. Assert json path exist: Path Json dẫn tới giá trị cần check, bắt đầu bằng "$."
+	. Expected Value: Giá trị mong muốn
+
+
+
+Đề bài 2:
+	. Request:
+		+ URL: https://reqres.in/api/users?page=2
+		+ Method: GET
+
+	. Yêu cầu: Hãy check xem các id của key "data" có giá trị từ 7 đến 12 hay không?
+	. Lời giải:
+		Lấy id thứ 1 -> $.data[0].id => kết quả là 7
+		Lấy hết id   -> $.data[*].id => kết quả [7, 8, 9, 10, 11, 12]
+
+
+Lesson 05-------------------------------------------------*
+// Response Assertion: Dùng để check 1 giá trị cụ thể (không chỉ JSON như bài trước) trong response có như mong đợi không
+// Vị trí: Right Click HTTP Request -> Add -> Assertions -> Response Assertion
+
+- Có rất nhiều mục, 4 mục chính cần quan tâm:
+	+ Apply to: Chọn phạm vi để check response
+	+ Field to test: Các trường cụ thể trong response muốn lấy giá trị để check
+	+ Pattern matching rules: Quy luật so sánh actual result và expected result: equal, contains (tồn tại bất kỳ đâu trong response), match, substring....
+	+ Pattern to test: Là giá trị mong muốn, click add để điền, nếu nhiều giá trị thì add nhiều lần và chọn thêm OR
+	
+- Đề bài: 
+	* Request: 
+		URL: https://reqres.in/api/users?page=2
+		Method: GET
+
+	* Yêu cầu:
+		1. Hãy check xem trong reponse có chứa: "url":"https://contentcaddy.io?utm_source=reqres&utm_medium=json&utm_campaign=referral" hay không
+		2. Check xem stt code trả về của api có bằng 200 không
+		3. Check xem url gửi đi có phải là: https://reqres.in/api/users?page=2 hay không
+
+	*** Lưu ý khi sử dụng Text Reponse (chỉ kiểm tra phần body): 
+		1. Chú ý khoảng trắng để view Text: ko có, JSON: có gõ theo JSON (có khoảng trắng) -> Fail
+		2. Chú ý các kí tự đặc biệt và sử dụng "\": ví dụ \? để dùng ?,...
+		
+
+Lesson 06-------------------------------------------------*
+// JSON Extractor, Debug Sampler
+
+- Json Extractor (vừa có thể verify, vừa có thể đưa vào một API khác,...): Là 1 trong những loại Post Processors (ta hiểu chúng dùng để xử lý data)
+(JSON Extractor: dùng để lấy ra một giá trị cần thiết của response API dạng json, (ko dùng JSON Asertion) vì trong một số trường hợp cần lấy giá trị của reponse API này
+để đặt vào một request cảu một API khác)
+- JSON Extractor dùng để lấy ra giá trị cần thiết từ trong reponse API dạng JSON
+- Nó cần thiết trong hoạt động kiểm thử khi ta phải test API, check các nội dung trong response xem có như mong đợi
+- Cách tạo: Right click lên Thread Group hoặc 1 sampler (như http request) > chọn add > Post Processors > JSON Extractor
+
+- Các thông số: 
+	+ Apply to: Tương tự như Response assertion
+	+ Name of created variable: tên biến gán cho giá trị lấy được
+	+ Json path expression: Jsonpath đến giá trị cần tìm
+	+ Match No: chỉ số đến giá trị đó trong trường hợp JSonpath chỉ tới nhiều giá trị [mảng] (để trống hoặc điền 0 > lấy random, điền -1 sẽ lấy tất), 1 sẽ lấy phần tử thứ nhất,... (thứ tự phần tử đi từ 1)
+	+ Compute concatenation (sự ghép nối) var: Lấy ra số lượng kết quả và gán thành biến dạng var_matchNr (trong đó var là tên biến đặt ở mục Name of created variable)
+	+ Default value: Giá trị mặc định của biến khi không lấy được data nào
+
+- Debug Sampler: Công cụ để debug, xem log sau khi chạy, phục vụ cho việc tìm nguyên nhân đoạn script chạy lỗi
+- Cách tạo: Chuột phải Thread Groups > add > samplers > debug sampler
+
+
+- Đề bài:
+	+ Request: 
+		URL: https://reqres.in/api/users?page=2
+	+ Yêu cầu:
+		1. Hãy lấy ra id ở vị trí thứ 2, sau đó dùng debug để xem kết quả lấy được
+		2. Hãy lấy ra tất cả id sau đó dùng debug để xem kết quả lấy được
+		
+Lesson 07-------------------------------------------------*
+// JSR223 PostProcessor, Log info
+
+- JSR223 PostProcessor: Là 1 trong những loại Post Processor (ta hiểu chúng dùng để xử lý dữ liệu)
+- JSR223 PostProcessor: dùng để xử lý dữ liệu trước khi thao tác gì đó (ví dụ: trước khi verify data, trước khi update vào DB, trước khi truyền vào request API,...)
+- JSR223 PostProcessor: hoạt động bằng cách dùng các đoạn script để xử lý
+- Nó cần thiết trong hoạt động kiểm thử khi ta phải test API, xử lý data thành dạng ta mong đợi để tiến hành các bước đằng sau
+- Cách tạo: Chuột phải tại thread group hoặc chuột phải tại 1 sampler (như http request) > chọn add > Post Processors > JSR223 PostProcessor
+- JSR223 PostProcessor thường được sử dụng chung với JSON Extractor (JSON Extractor sẽ lấy dữ liệu ra thành biến, sau đó sẽ viết script để xử lý trong JSR223 PostProcessor)
+(Muốn dùng biến phải thêm chỉ số: ví dụ (Name of created variable: getEmail2 thì muốn sử dụng JSR223 PostProcessor getEmail2_1))
+(Các JSON Extractor phải đặt trước các JSR223 PostProcessor nếu muốn dùng nó)
+
+- Đề bài:
+	+ Request:
+		. URL: https://reqres.in/api/users?page=2
+		. Method: GET
+	+ Yêu cầu bài toán:
+		1. Hãy lấy email ở vị trí thứ 2, chỉ lấy phần username (phần đằng trước @) sau đó in ra bằng log info
+		2. Hãy lấy ra tất cả email, chỉ lấy phần username (phần đằng trước @) sau đó in ra bằng log info lần lượt tất cả chúng
+
+
+Lesson 08-------------------------------------------------*
+// JSR223 Assertion
+
+- JSR223 Assertion: là 1 loại assertion dùng để verify data giống như JSON Assertion
+- JSR223 Assertion: giống JSR223 PostProcessor ở chỗ đều có thể xử lý data bằng script, ngoài ra có thể verify dữ liệu luôn
+- Nó cần thiết trong hoạt động kiểm thử khi ta phải test API, xử lý data thành dạng ta mong đợi và verify data đó
+- Cách tạo: Chuột phải tại Thread Group hoặc chuột phải tại 1 sampler (như http request) > chọn add > Assertions > JSR223 Assertion
+
+
+- Đề bài: 
+	+ Request:
+		. Hãy lấy email ở vị trí thứ 2, chỉ lấy ra phần sau @, 
+		sau đó check xem chuỗi đó có phải reqres.in hay không
+
+		. Hãy lấy tất cả email, chỉ lấy ra phần sau @, sau đó
+		lần lượt check xem từng chuối đó có phải reqres.in hay không
+
+
+Lesson 09-------------------------------------------------*
+// Variables
+
+- User defined variables: là một chức năng để khai báo biến giúp giản tiện khi phải nhập đi nhập lại 1 giá trị nhiều lần
+- Cách tạo: Chuột phải test plan, hoặc chuột phải lên thread group, hoặc chuột phải 1 sampler (tùy thuộc vào phạm vi biến muốn dùng) > Add > Config Elements > User Defined variables
+- Click Add khi muốn thêm một biến, bao gồm 3 trường là : tên biến, giá trị của biến và mô tả (không bắt buộc)
+
+- Đề bài:
+	+ Request:
+		. URL: https://reqres.in/api/users?page=2
+		. Method: GET
+	+ Yêu cầu bài toán:
+		1. Hãy khai báo biến URL: có giá trị là reqres.in
+		2. Chạy request API trên bằng cách truyền biến
+
+- Cú pháp để gọi biến trong JMeter là: ${variableName}
+
+- Random Variable: là 1 chức năng dùng để khai báo biến có giá trị ngẫu nhiên (mỗi 1 lần chạy biến sẽ có 1 giá trị khác nhau) theo một cấu trúc mong muốn
+- Cách tạo: Chuột phải lên test plan, hoặc chuột phải thread group, hoặc chuột phải lên 1 sampler (tùy vào phạm vi biến muốn dùng) > Add > Config Elements > Random Variable
+- Cấu trúc chung của một biến ngẫu nhiên: 1 chuỗi stirng + giá trị biến thiên ngẫu nhiên (số, ...)
+- Output Format: nơi điền chuỗi string nói ở trên
+
+- Chú thích: 
+	+ Variable name: Điền tên biến muốn đặt
+	+ Output Format: Điền nội dung format giá trị của biến
+	+ Minimum Value: Giá trị biến thiên min của biến
+	+ Maximum value: Giá trị biến thiên max của biến
+
+
+- Đề bài: 
+	. Request:
+		+ url: https://reqres.in/api/users
+		+ method: POST
+		+ body dạng paramter:	
+			. name: morpheus
+			. job: leader
+
+	. Reponse:
+	{
+		"name": "morpheus",
+		"job": "leader",
+		"id": "557",
+		"createdAt": "2002-10-06T01:53:17.528Z"
+	} 
+
+- Yêu cầu:
+	1. Khai báo biến ngẫu nhiên name có dạng: NametestXXXX (trong đó XXXX là 4 số ngẫu nhiên)
+	2. Khai báo biến ngẫu nhiên job có dạng: JobtestXXX (trong đó XXX là 3 số ngẫu nhiên nhỏ hơn 500)
+	3. Chạy request API trên bằng cách truyền biến name và param name và param job
+	4. Hãy verify job và name của response tra ra giống như job và name của request gửi đi hay không
+
+
+Lesson 10-------------------------------------------------*
+// CSV Dataset Config
+
+- CSV Data Set Config: là 1 tính năng cho phép người dùng sử dụng file CSV làm nơi khai báo
+biến với nhiều dòng giá trị và dùng chúng trong việc kiểm thử theo data driven framework
+
+- Đây là một tính năng quan trọng và phổ biến trong JMeter, nó giúp tiết kiệm nhiều thời gain kiểm thử 
+với những nhóm case có cùng thao tác và kết quả mong muốn, chỉ khác data đầu vào và đầu ra
+
+- Cách tạo: Chuột phải test plan, hoặc chuột phải thread group, hoặc chuột phải 1 sampler
+(tùy vào phạm vi biến muốn dùng) > Add > Config Elements > CSV Data Set Config
+
+
+- Cách config CSV Dataset config
+	. Filename: Đường dẫn đến file CSV
+	. File encoding: định dạng file theo chuẩn gì, thường để UTF-8
+	. Variables name: tên biến
+		. Ví dụ file CSV có tên cột thì ta để trống => bởi nếu để trống JMeter sẽ tự lấy dòng đầu làm tên biến
+		. Nếu file CSV ko để tên cột, thì ta điền biến vào đay, ứng với từng cột, cách nhau bởi dấu "," (userLogin, expectedToken), 
+		nếu muốn bỏ qua cột nào thì KO điền tên biến đó và thêm một dấu "," vào (userLogin,,)
+	. Ignore first line: bỏ qua dòng đầu
+		. True: nếu dòng dầu trong file CSV của ta là tên cột
+		. False: nếu dòng đầu trong file CSV không có tên cột mà là data luôn
+	. Delimiter: dấu để tách từng cột trong file CSV, thông thường là dấu phẩy, nếu để dấu phẩy mà không chạy được ta cần mở file CSV lên bằng notepad
+	hoặc text editor,...để xem data đang được ngăn cách bằng dấu gì thì ta điền dấu đó.
+	. Allow quoted data?: Nếu được bật, thì các giá trị có thể được đặt trong dấu ngoặc kép, cho phép các giá trị chứa dấu phân cách
+	. Recycle on EOF?: Nếu số lượng thread > số lượng Test Data, bạn có muốn tiếp tục thực hiện kiểm thử
+	bằng cách quay trở lại đọc từ đầu không?
+	. Stop thread on EOF?: Nếu chọn "Set", khi chạy đến EOF sẽ khiến cho thread bị dừng lại
+	. Sharing mode: Tại đây bạn có thể định nghĩa hành vi chia sẻ của file CSV. Mặc định sẽ chọn là "All threads"
+
+Lesson 11-------------------------------------------------*
+// If controller và Foreach Controller
+
+- If controller: là 1 loại controller, dùng trong trường hợp các testcase chúng ta chạy với những điều kiện khác nhau
+sẽ thực hiện những action khác nhau (tương tự như cấu trúc if trong code)
+- Cách tạo: Chuột phải lên Thread Group > Add > Logic Controller > If controller
+- Config:
+	. Expression: Nhập vào mệnh đề thỏa mãn trả ra kết quả true hoặc false
+	. Interpret Condition as Variable Expression:
+		+ Check: nếu dùng expression dạng __jexl3 hoặc __groovy => performance sẽ tốt hơn
+		+ Uncheck: nếu dùng expression dạng variable bình thường
+
+
+- Đề bài:
+	+ Khai báo 1 biến ngẫu nhiên number có giá trị từ 1-100
+	+ Dùng 2 if controller để chạy 2 api khác nhau, với điều kiện nếu number <=50 thì chạy api1, number>50 thì chạy api2
+	+ Dùng View Result Tree để so sánh kết quả
+
+
+- For each Controller: dùng để chạy lặp lại 1 (nhiều) action nhiều lần, bằng cách truyền vào biến (từ ngoài vào) 
+có giá trị khác nhau ở mỗi lần chạy cho tới khi các giá trị của biến lần lượt chạy xong (hoặc chạy hết các giá trị 
+mong muốn)
+- Cách tạo: Chuột phải thread group > Add > Logic Controller > Foreach Controller
+- Config:
+	+ Input variable prefix: tên biến dạng mảng (có nhiều giá trị)
+	+ Start index for loop: chỉ số khởi tạo giá trị của biến
+	+ End index for loop: chỉ số kết thúc giá trị của biến
+	+ Hiểu nôm na là chạy từ biến có index a->b
+	+ Để trống Start và End Index để chạy hết các giá trị biến
+- Output variable name: tên biến dùng để gọi bên trong vòng For 
+
+
+- Đề bài: 
+	+ Chạy API get users của bài trước và lấy ra các email trong phần data
+	+ Lần lượt chạy API login với email là các email lấy được từ API trên
+
+
+Lesson 12 (Done)-------------------------------------------------*
+// Connect to DB
+
+- Trong quá trình kiểm thử API tự động, việc phải kết nối vào DB để check dữ liệu là việc thường xuyên và bắt buộc để đảm bảo dữ liệu của API là đúng với DB
+- JDBC Connection Configuration: là 1 chức năng giúp chúng ta kết nối từ JMeter vào cơ sở dữ liệu
+- Cách tạo JDBC Connection Configuration: Chuột phải -> Add -> Config Element -> JDBC Connection Configuration
+- JDBC Request: là 1 chức năng giúp chúng ta thực hiện các request đến DB như select, update, insert, delete
+- Cách tạo JDBC request: Chuột phải > Add > Samplers > JDBC Request
+
+- Các thông số trong Config JDBC Connection Configuarion:
+	+ Variable name of created pool: là tên biến dùng chung cho connect DB và các lệnh query sau này (đặt là gì cũng được)
+	+ Database URL: Url dẫn tới DB (Lưu ý mỗi loại DB sẽ có một cấu trúc URL khác nhau)
+	+ Cấu trúc của SQL Server là:
+	jdbc:sqlserver://[servername/ip]:[port];databaseName=[Name of DB];encrypt=true;trustServerCertificate=true
+	Phần encrypt=true;trustServerCertificate=true để cung cấp chứng chỉ tin cậy cho JMeter đồng ký kết nối
+	JDBC driver class: chọn loại như sau
+	com.microsoft.sqlserver.jdbc.SQLSERVERDRIVER
+	Điền username passwork để kết nối
+
+
+- Với Config JDBC Request:
+	+ Variable of pool...: phải điền đúng Variable name of created pool ở bước 1
+	+ Query type: chọn select nếu chạy câu lệnh select, update nếu chạy câu lệnh update, delete, insert
+	+ Nhập câu query vào ô dưới
+	+ Variable name: tên cột trong kết quả mà ta mong muốn lấy làm biến để so sánh (lưu ý tên biến phải viết cách nhau bởi dấu phẩy,
+	JMeter sẽ gán tượng tự từng cột trong kết quả với từng tên biến theo thứ tự từ trái sang)
+
+- Đề bài 1:
+	+ Cho DB sau:
+		. Servername: DESKTOP-80PCMJB\GIANGTESTER
+		. Username: gianght
+		. pass: 123456
+		. Tên DB: QLBH
+	
+	+ Yêu cầu:	
+		1. Kết nối tới DB trên
+		2. Viết câu query để lấy ra danh sách các products và xem kết quả bằng view result tree
+
+
+- Đề bài 2: 
+	+ Cho request
+		. URL: https//reqres.in/api/login
+		. Method: POST
+		. Body: dạng Parameter
+			+ email: eve.holt@reqres.in
+			+ password: cityslicka
+	+ Trả response:
+	{
+		"token": "QpwL5tke4Pnpja7X4"
+	}
+	
+
+	+ Yêu cầu: Trong DB, check lần lượt response API trả ra token có tương ứng vs token lưu trong DB ứng với từng username hay không
+
+
+	     userLogin			  expectedToken
+	george.bluth@reqres.in		QpwL5tke4Pnpja7X1
+	janet.weaver@reqres.in		QpwL5tke4Pnpja7X2
+	emma.wong@reqres.in		QpwL5tke4Pnpja7X3
+	eve.holt@reqres.in		QpwL5tke4Pnpja7X4
+	charles.morris@reqres.in	QpwL5tke4Pnpja7X5
+	tracey.ramos@reqres.in		QpwL5tke4Pnpja7X6
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

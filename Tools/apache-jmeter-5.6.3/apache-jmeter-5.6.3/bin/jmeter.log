@@ -1,0 +1,28 @@
+2025-01-03 15:46:14,497 INFO o.a.j.u.JMeterUtils: Setting Locale to en_US
+2025-01-03 15:46:14,508 INFO o.a.j.JMeter: Loading user properties from: user.properties
+2025-01-03 15:46:14,508 INFO o.a.j.JMeter: Loading system properties from: system.properties
+2025-01-03 15:46:14,512 INFO o.a.j.JMeter: Copyright (c) 1998-2024 The Apache Software Foundation
+2025-01-03 15:46:14,512 INFO o.a.j.JMeter: Version 5.6.3
+2025-01-03 15:46:14,512 INFO o.a.j.JMeter: java.version=1.8.0_121
+2025-01-03 15:46:14,512 INFO o.a.j.JMeter: java.vm.name=Java HotSpot(TM) 64-Bit Server VM
+2025-01-03 15:46:14,512 INFO o.a.j.JMeter: os.name=Windows 10
+2025-01-03 15:46:14,512 INFO o.a.j.JMeter: os.arch=amd64
+2025-01-03 15:46:14,512 INFO o.a.j.JMeter: os.version=10.0
+2025-01-03 15:46:14,512 INFO o.a.j.JMeter: file.encoding=Cp1252
+2025-01-03 15:46:14,512 INFO o.a.j.JMeter: java.awt.headless=null
+2025-01-03 15:46:14,512 INFO o.a.j.JMeter: Max memory     =5672796160
+2025-01-03 15:46:14,512 INFO o.a.j.JMeter: Available Processors =16
+2025-01-03 15:46:14,515 INFO o.a.j.JMeter: Default Locale=English (United States)
+2025-01-03 15:46:14,515 INFO o.a.j.JMeter: JMeter  Locale=English (United States)
+2025-01-03 15:46:14,515 INFO o.a.j.JMeter: JMeterHome=C:\Users\ncbao\Downloads\Draft Repo On Github\Draft\JMeter Tutorial\Tools\apache-jmeter-5.6.3\apache-jmeter-5.6.3
+2025-01-03 15:46:14,515 INFO o.a.j.JMeter: user.dir  =C:\Users\ncbao\Downloads\Draft Repo On Github\Draft\JMeter Tutorial\Tools\apache-jmeter-5.6.3\apache-jmeter-5.6.3\bin
+2025-01-03 15:46:14,515 INFO o.a.j.JMeter: PWD       =C:\Users\ncbao\Downloads\Draft Repo On Github\Draft\JMeter Tutorial\Tools\apache-jmeter-5.6.3\apache-jmeter-5.6.3\bin
+2025-01-03 15:46:14,516 INFO o.a.j.JMeter: IP: 192.168.89.84 Name: ncbao FullName: ncbao.tma.com.vn
+2025-01-03 15:46:14,526 INFO o.a.j.JMeter: Loaded icon properties from org/apache/jmeter/images/icon.properties
+2025-01-03 15:46:14,618 INFO o.a.j.JMeterGuiLauncher: Setting LAF to: com.github.weisj.darklaf.DarkLaf:com.github.weisj.darklaf.theme.DarculaTheme
+2025-01-03 15:46:15,155 INFO o.a.j.r.ClassFinder: Will scan jar C:\Users\ncbao\Downloads\Draft Repo On Github\Draft\JMeter Tutorial\Tools\apache-jmeter-5.6.3\apache-jmeter-5.6.3\lib\ext\jmeter-plugins-perfmon-2.1.jar with filter ExtendsClassFilter [parents=[interface org.apache.jmeter.gui.action.Command], inner=false, contains=null, notContains=null]. Consider exposing JMeter plugins via META-INF/services, and add JMeter-Skip-Class-Scanning=true manifest attribute so JMeter can skip classfile scanning
+2025-01-03 15:46:15,165 INFO o.a.j.r.ClassFinder: Will scan jar C:\Users\ncbao\Downloads\Draft Repo On Github\Draft\JMeter Tutorial\Tools\apache-jmeter-5.6.3\apache-jmeter-5.6.3\lib\ext\jmeter-plugins-manager-0.20.jar with filter ExtendsClassFilter [parents=[interface org.apache.jmeter.gui.action.Command], inner=false, contains=null, notContains=null]. Consider exposing JMeter plugins via META-INF/services, and add JMeter-Skip-Class-Scanning=true manifest attribute so JMeter can skip classfile scanning
+2025-01-03 15:46:15,286 INFO o.a.j.r.ClassFinder: Will scan jar C:\Users\ncbao\Downloads\Draft Repo On Github\Draft\JMeter Tutorial\Tools\apache-jmeter-5.6.3\apache-jmeter-5.6.3\lib\ext\jmeter-plugins-perfmon-2.1.jar with filter ExtendsClassFilter [parents=[interface org.apache.jmeter.gui.plugin.MenuCreator], inner=false, contains=null, notContains=null]. Consider exposing JMeter plugins via META-INF/services, and add JMeter-Skip-Class-Scanning=true manifest attribute so JMeter can skip classfile scanning
+2025-01-03 15:46:15,288 INFO o.a.j.r.ClassFinder: Will scan jar C:\Users\ncbao\Downloads\Draft Repo On Github\Draft\JMeter Tutorial\Tools\apache-jmeter-5.6.3\apache-jmeter-5.6.3\lib\ext\jmeter-plugins-manager-0.20.jar with filter ExtendsClassFilter [parents=[interface org.apache.jmeter.gui.plugin.MenuCreator], inner=false, contains=null, notContains=null]. Consider exposing JMeter plugins via META-INF/services, and add JMeter-Skip-Class-Scanning=true manifest attribute so JMeter can skip classfile scanning
+2025-01-03 15:46:17,927 INFO o.j.r.PluginManager: Plugins Status: [jpgc-perfmon=2.1, jpgc-plugins-manager=0.20, jmeter-core=5.6.3, jmeter-ftp=5.6.3, jmeter-http=5.6.3, jmeter-jdbc=5.6.3, jmeter-jms=5.6.3, jmeter-junit=5.6.3, jmeter-java=5.6.3, jmeter-ldap=5.6.3, jmeter-mail=5.6.3, jmeter-mongodb=5.6.3, jmeter-native=5.6.3, jmeter-tcp=5.6.3, jmeter-components=5.6.3]
+2025-01-03 15:46:17,927 INFO o.j.r.PluginManagerMenuItem: Plugins Manager has upgrades: [jpgc-plugins-manager]
