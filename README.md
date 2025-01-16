@@ -22,7 +22,7 @@ Welcome to **JMeterGenius**! This repository is dedicated to exploring the power
 - Real-world use cases and examples
 - Best practices for effective load testing
 
-## Installation🛠️
+## Installation🔧
 
 To get started with **JMeterGenius**, follow these steps:
 
@@ -36,10 +36,7 @@ To get started with **JMeterGenius**, follow these steps:
     cd JMeterGenius
     ```
 
-3. Install the required dependencies:
-    ```bash
-    # Add specific installation steps here
-    ```
+3. Use JMeter tools in [tools](tools) folder
 
 ## Usage💡
 
