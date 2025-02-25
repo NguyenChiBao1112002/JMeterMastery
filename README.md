@@ -28,12 +28,12 @@ To get started with **JMeterGenius**, follow these steps:
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/your-username/JMeterGenius.git
+    git clone https://github.com/NguyenChiBao1112002/JMeterMastery.git
     ```
 
 2. Navigate to the project directory:
     ```bash
-    cd JMeterGenius
+    cd JMeterMastery
     ```
 
 3. Use JMeter tools in [Tools](Tools) folder
